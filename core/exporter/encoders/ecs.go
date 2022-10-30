@@ -202,6 +202,7 @@ func (ecs *ECSRecord) encodeNetworkFlow(rec *engine.Record) {
 	rops := engine.Mapper.MapInt(engine.SF_FLOW_ROPS)(rec)
 	wbytes := engine.Mapper.MapInt(engine.SF_FLOW_WBYTES)(rec)
 	wops := engine.Mapper.MapInt(engine.SF_FLOW_WOPS)(rec)
+	// gaptime := engine.Mapper.MapInt(engine.SF_FLOW_GAPTIME)(rec)
 	sip := engine.Mapper.MapStr(engine.SF_NET_SIP)(rec)
 	dip := engine.Mapper.MapStr(engine.SF_NET_DIP)(rec)
 	sport := engine.Mapper.MapInt(engine.SF_NET_SPORT)(rec)
@@ -242,6 +243,7 @@ func (ecs *ECSRecord) encodeFileFlow(rec *engine.Record) {
 	rops := engine.Mapper.MapInt(engine.SF_FLOW_ROPS)(rec)
 	wbytes := engine.Mapper.MapInt(engine.SF_FLOW_WBYTES)(rec)
 	wops := engine.Mapper.MapInt(engine.SF_FLOW_WOPS)(rec)
+	gaptime := engine.Mapper.MapInt(engine.SF_FLOW_GAPTIME)(rec)
 	category := ECS_CAT_FILE
 	eventType := ECS_TYPE_ACCESS
 	action := category + "-" + eventType
@@ -254,12 +256,13 @@ func (ecs *ECSRecord) encodeFileFlow(rec *engine.Record) {
 	}
 	ecs.Event = encodeEvent(rec, category, eventType, action)
 	ecs.File = encodeFile(rec)
-	if rbytes > 0 || rops > 0 || wbytes > 0 || wops > 0 {
+	if rbytes > 0 || rops > 0 || wbytes > 0 || wops > 0 || gaptime > 0 {
 		ecs.FileAction = JSONData{
-			ECS_SF_FA_RBYTES: rbytes,
-			ECS_SF_FA_ROPS:   rops,
-			ECS_SF_FA_WBYTES: wbytes,
-			ECS_SF_FA_WOPS:   wops,
+			ECS_SF_FA_RBYTES:  rbytes,
+			ECS_SF_FA_ROPS:    rops,
+			ECS_SF_FA_WBYTES:  wbytes,
+			ECS_SF_FA_WOPS:    wops,
+			ECS_SF_FA_GAPTIME: gaptime,
 		}
 	}
 }

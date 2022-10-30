@@ -105,6 +105,7 @@ const (
 	SF_FLOW_ROPS            string = "sf.flow.rops"
 	SF_FLOW_WBYTES          string = "sf.flow.wbytes"
 	SF_FLOW_WOPS            string = "sf.flow.wops"
+	SF_FLOW_GAPTIME         string = "sf.flow.gaptime"
 	SF_CONTAINER_ID         string = "sf.container.id"
 	SF_CONTAINER_NAME       string = "sf.container.name"
 	SF_CONTAINER_IMAGEID    string = "sf.container.imageid"

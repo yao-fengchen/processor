@@ -104,10 +104,11 @@ const (
 	ECS_PROC_TID        = "id"
 	ECS_PROC_START      = "start"
 
-	ECS_SF_FA_RBYTES = "bytes_read"
-	ECS_SF_FA_ROPS   = "read_ops"
-	ECS_SF_FA_WBYTES = "bytes_written"
-	ECS_SF_FA_WOPS   = "write_ops"
+	ECS_SF_FA_RBYTES  = "bytes_read"
+	ECS_SF_FA_ROPS    = "read_ops"
+	ECS_SF_FA_WBYTES  = "bytes_written"
+	ECS_SF_FA_WOPS    = "write_ops"
+	ECS_SF_FA_GAPTIME = "gap_time"
 
 	ECS_SERVICE_ID         = "id"
 	ECS_SERVICE_NAME       = "name"

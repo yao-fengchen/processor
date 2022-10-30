@@ -26,8 +26,8 @@ require (
 	github.com/actgardner/gogen-avro/v7 v7.3.1
 	github.com/linkedin/goavro v2.1.0+incompatible
 	github.com/spf13/viper v1.10.1
-	github.com/sysflow-telemetry/sf-apis/go v0.0.0-20220720151945-fca5a11be917
-	github.com/sysflow-telemetry/sf-processor/core v0.0.0-20220221021811-25c7181c2904
+	// github.com/sysflow-telemetry/sf-apis/go v0.0.0-20220720151945-fca5a11be917
+	// github.com/sysflow-telemetry/sf-processor/core v0.0.0-20220221021811-25c7181c2904
 )
 
 require (
@@ -77,8 +77,10 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/sysflow-telemetry/sf-processor/core => ../core
-
+replace (
+	github.com/sysflow-telemetry/sf-processor/core => ../core
+	github.com/sysflow-telemetry/sf-apis/go => ../api
+)
 replace (
 	github.com/Shopify/sarama => github.com/elastic/sarama v1.19.1-0.20200629123429-0e7b69039eec
 	github.com/dop251/goja => github.com/andrewkroh/goja v0.0.0-20190128172624-dd2ac4456e20

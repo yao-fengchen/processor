@@ -38,7 +38,7 @@ require (
 	github.com/satta/gommunityid v0.0.0-20210315182841-1cdcb73ce408
 	github.com/steakknife/bloomfilter v0.0.0-20180922174646-6819c0d2a570
 	github.com/stretchr/testify v1.7.0
-	github.com/sysflow-telemetry/sf-apis/go v0.0.0-20220720151945-fca5a11be917
+	// github.com/sysflow-telemetry/sf-apis/go v0.0.0-20220720151945-fca5a11be917
 	github.com/tidwall/gjson v1.14.1
 )
 
@@ -68,3 +68,5 @@ require (
 	gopkg.in/linkedin/goavro.v1 v1.0.5 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
+
+replace github.com/sysflow-telemetry/sf-apis/go => ../api

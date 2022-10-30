@@ -169,6 +169,7 @@ func (s *Flattener) HandleNetFlow(sf *plugins.CtxSysFlow, nf *sfgo.NetworkFlow) 
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_NETW_NUMWSENDOPS_INT] = nf.NumWSendOps
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_NETW_NUMRRECVBYTES_INT] = nf.NumRRecvBytes
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_NETW_NUMWSENDBYTES_INT] = nf.NumWSendBytes
+	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_NETW_GAPTIME_INT] = nf.GapTime
 	fr.Ptree = sf.PTree
 	fr.GraphletID = sf.GraphletID
 	s.out(fr)
@@ -190,6 +191,7 @@ func (s *Flattener) HandleFileFlow(sf *plugins.CtxSysFlow, ff *sfgo.FileFlow) er
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_FILE_NUMWSENDOPS_INT] = ff.NumWSendOps
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_FILE_NUMRRECVBYTES_INT] = ff.NumRRecvBytes
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_FILE_NUMWSENDBYTES_INT] = ff.NumWSendBytes
+	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_FILE_GAPTIME_INT] = ff.GapTime
 	fr.Ptree = sf.PTree
 	fr.GraphletID = sf.GraphletID
 	s.out(fr)

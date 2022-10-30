@@ -48,6 +48,7 @@ COPY plugins ${SRC_ROOT}plugins
 COPY resources ${SRC_ROOT}resources
 COPY Makefile ${SRC_ROOT}
 COPY makefile.manifest.inc ${SRC_ROOT}
+COPY api ${SRC_ROOT}api
 
 # Build
 RUN cd ${SRC_ROOT} && \
