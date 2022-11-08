@@ -66,11 +66,11 @@ install: build
 
 .PHONY: docker-build
 docker-build: docker-plugin-builder
-	( DOCKER_BUILDKIT=1 docker build --cache-from=sysflowtelemetry/plugin-builder:${SYSFLOW_VERSION} -t yaofengchen/sf-processor:1.1 --build-arg UBI_VER=$(UBI_VERSION) --target=runtime -f Dockerfile . )
+	( DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 --cache-from=sysflowtelemetry/plugin-builder:${SYSFLOW_VERSION} -t yaofengchen/sf-processor:1.2 --build-arg UBI_VER=$(UBI_VERSION) --target=runtime -f Dockerfile . )
 
 .PHONY: docker-plugin-builder
 docker-plugin-builder:
-	( DOCKER_BUILDKIT=1 docker build -t sysflowtelemetry/plugin-builder:${SYSFLOW_VERSION} --build-arg UBI_VER=$(UBI_VERSION) --target=base -f Dockerfile . )
+	( DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 -t sysflowtelemetry/plugin-builder:${SYSFLOW_VERSION} --build-arg UBI_VER=$(UBI_VERSION) --target=base -f Dockerfile . )
 
 .PHONY: pull
 pull:
