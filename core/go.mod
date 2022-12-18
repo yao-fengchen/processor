@@ -1,23 +1,3 @@
-//
-// Copyright (C) 2020 IBM Corporation.
-//
-// Authors:
-// Frederico Araujo <frederico.araujo@ibm.com>
-// Teryl Taylor <terylt@ibm.com>
-// Andreas Schade <san@zurich.ibm.com>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
 module github.com/sysflow-telemetry/sf-processor/core
 
 go 1.17
@@ -38,7 +18,7 @@ require (
 	github.com/satta/gommunityid v0.0.0-20210315182841-1cdcb73ce408
 	github.com/steakknife/bloomfilter v0.0.0-20180922174646-6819c0d2a570
 	github.com/stretchr/testify v1.7.0
-	// github.com/sysflow-telemetry/sf-apis/go v0.0.0-20220720151945-fca5a11be917
+	github.com/sysflow-telemetry/sf-apis/go v0.0.0-20220720151945-fca5a11be917
 	github.com/tidwall/gjson v1.14.1
 )
 

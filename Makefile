@@ -1,11 +1,3 @@
-#
-# Copyright (C) 2020 IBM Corporation.
-#
-# Authors:
-# Frederico Araujo <frederico.araujo@ibm.com>
-# Teryl Taylor <terylt@ibm.com>
-#
-
 # Build environment configuration
 include ./makefile.manifest.inc
 
@@ -66,7 +58,7 @@ install: build
 
 .PHONY: docker-build
 docker-build: docker-plugin-builder
-	( DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 --cache-from=sysflowtelemetry/plugin-builder:${SYSFLOW_VERSION} -t yaofengchen/sf-processor:1.2 --build-arg UBI_VER=$(UBI_VERSION) --target=runtime -f Dockerfile . )
+	( DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 --cache-from=sysflowtelemetry/plugin-builder:${SYSFLOW_VERSION} -t yaofengchen/sf-processor:1.3 --build-arg UBI_VER=$(UBI_VERSION) --target=runtime -f Dockerfile . )
 
 .PHONY: docker-plugin-builder
 docker-plugin-builder:

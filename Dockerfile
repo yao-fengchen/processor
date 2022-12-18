@@ -1,22 +1,3 @@
-#
-# Copyright (C) 2021 IBM Corporation.
-#
-# Authors:
-# Frederico Araujo <frederico.araujo@ibm.com>
-# Teryl Taylor <terylt@ibm.com>
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 #-----------------------
 # Stage: base
 #-----------------------
@@ -36,10 +17,10 @@ ENV SRC_ROOT=/go/src/github.com/sysflow-telemetry/sf-processor/
 
 # Install dependencies
 RUN dnf update -y --disableplugin=subscription-manager && \
-     dnf install -y  --disableplugin=subscription-manager wget gcc make git device-mapper-devel
+    dnf install -y  --disableplugin=subscription-manager wget gcc make git device-mapper-devel
 
-RUN wget https://go.dev/dl/go1.17.7.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.17.7.linux-amd64.tar.gz && mkdir -p $SRC_ROOT
+COPY package/go1.17.7.linux-amd64.tar.gz .
+RUN tar -C /usr/local -xzf go1.17.7.linux-amd64.tar.gz && mkdir -p $SRC_ROOT
 
 # Copy sources
 COPY core ${SRC_ROOT}core
@@ -54,7 +35,7 @@ COPY api ${SRC_ROOT}api
 RUN cd ${SRC_ROOT} && \
     make SYSFLOW_VERSION=$VERSION \
          SYSFLOW_BUILD_NUMBER=$BUILD_NUMBER \
-         install
+         install -j8
 
 #-----------------------
 # Stage: runtime
