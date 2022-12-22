@@ -301,6 +301,7 @@ func (ecs *ECSRecord) encodeProcessEvent(rec *engine.Record) {
 	opFlags := rec.GetInt(sfgo.EV_PROC_OPFLAGS_INT, sfgo.SYSFLOW_SRC)
 	pid := engine.Mapper.MapInt(engine.SF_PROC_PID)(rec)
 	tid := engine.Mapper.MapInt(engine.SF_PROC_TID)(rec)
+	// tty := engine.Mapper.MapInt(engine.SF_PROC_TTY)
 	category := ECS_CAT_PROCESS
 	eventType := ECS_TYPE_START
 
@@ -480,6 +481,7 @@ func encodeProcess(rec *engine.Record) JSONData {
 		ECS_PROC_START:   utils.ToIsoTimeStr(engine.Mapper.MapInt(engine.SF_PROC_CREATETS)(rec)),
 		ECS_PROC_NAME:    path.Base(exe),
 		ECS_PROC_THREAD:  JSONData{ECS_PROC_TID: engine.Mapper.MapInt(engine.SF_PROC_TID)(rec)},
+		ECS_PROC_TTY:	  engine.Mapper.MapInt(engine.SF_PROC_TTY)(rec) != 0,
 	}
 	pexe := engine.Mapper.MapStr(engine.SF_PPROC_EXE)(rec)
 	parent := JSONData{
@@ -489,6 +491,7 @@ func encodeProcess(rec *engine.Record) JSONData {
 		ECS_PROC_PID:     engine.Mapper.MapInt(engine.SF_PPROC_PID)(rec),
 		ECS_PROC_START:   utils.ToIsoTimeStr(engine.Mapper.MapInt(engine.SF_PPROC_CREATETS)(rec)),
 		ECS_PROC_NAME:    path.Base(pexe),
+		ECS_PROC_TTY:	  engine.Mapper.MapInt(engine.SF_PPROC_TTY)(rec) != 0,
 	}
 	process[ECS_PROC_PARENT] = parent
 	return process

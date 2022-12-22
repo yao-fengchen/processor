@@ -105,6 +105,7 @@ const (
 	ECS_PROC_THREAD     = "thread"
 	ECS_PROC_TID        = "id"
 	ECS_PROC_START      = "start"
+	ECS_PROC_TTY		= "tty"
 
 	ECS_SF_FA_RBYTES  = "bytes_read"
 	ECS_SF_FA_ROPS    = "read_ops"
