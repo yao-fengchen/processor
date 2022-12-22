@@ -38,3 +38,6 @@ driver/manifest/manifest.gobak
 scripts/cpack/_CPack_Packages/
 scripts/cpack/build/
 scripts/cpack/sfprocessor*
+
+# package
+package/
