@@ -503,15 +503,76 @@ func encodeEvent(rec *engine.Record, category string, eventType string, action s
 	}
 	sfType := engine.Mapper.MapStr(engine.SF_TYPE)(rec)
 	sfRet := engine.Mapper.MapInt(engine.SF_RET)(rec)
+	opFlags := rec.GetInt(sfgo.EV_PROC_OPFLAGS_INT, sfgo.SYSFLOW_SRC)
+	var ops string = ""
+	if opFlags&sfgo.OP_CLONE == sfgo.OP_CLONE {
+		ops = ops + "clone "
+	} 
+	if opFlags&sfgo.OP_EXEC == sfgo.OP_EXEC {
+		ops = ops + "exec "
+	} 
+	if opFlags&sfgo.OP_EXIT == sfgo.OP_EXIT {
+		ops = ops + "exit "
+	} 
+	if opFlags&sfgo.OP_SETUID == sfgo.OP_SETUID {
+		ops = ops + "setuid "
+	} 
+	if opFlags&sfgo.OP_SETNS == sfgo.OP_SETNS {
+		ops = ops + "setns "
+	} 
+	if opFlags&sfgo.OP_ACCEPT == sfgo.OP_ACCEPT {
+		ops = ops + "accept "
+	} 
+	if opFlags&sfgo.OP_READ_RECV == sfgo.OP_READ_RECV {
+		ops = ops + "read_recv "
+	} 
+	if opFlags&sfgo.OP_WRITE_SEND == sfgo.OP_WRITE_SEND {
+		ops = ops + "write_send "
+	} 
+	if opFlags&sfgo.OP_CLOSE == sfgo.OP_CLOSE {
+		ops = ops + "close "
+	} 
+	if opFlags&sfgo.OP_TRUNCATE == sfgo.OP_TRUNCATE {
+		ops = ops + "truncate "
+	} 
+	if opFlags&sfgo.OP_SHUTDOWN == sfgo.OP_SHUTDOWN {
+		ops = ops + "shutdown "
+	} 
+	if opFlags&sfgo.OP_MMAP == sfgo.OP_MMAP {
+		ops = ops + "mmap "
+	} 
+	if opFlags&sfgo.OP_DIGEST == sfgo.OP_DIGEST {
+		ops = ops + "digest "
+	} 
+	if opFlags&sfgo.OP_MKDIR == sfgo.OP_MKDIR {
+		ops = ops + "mkdir "
+	} 
+	if opFlags&sfgo.OP_RMDIR == sfgo.OP_MKDIR {
+		ops = ops + "rmdir "
+	} 
+	if opFlags&sfgo.OP_LINK == sfgo.OP_LINK {
+		ops = ops + "link "
+	} 
+	if opFlags&sfgo.OP_UNLINK == sfgo.OP_UNLINK {
+		ops = ops + "unlink "
+	} 
+	if opFlags&sfgo.OP_SYMLINK == sfgo.OP_SYMLINK {
+		ops = ops + "symlink "
+	} 
+	if opFlags&sfgo.OP_RENAME == sfgo.OP_RENAME {
+		ops = ops + "rename "
+	} 
 
 	event := JSONData{
-		ECS_EVENT_CATEGORY: category,
-		ECS_EVENT_TYPE:     eventType,
-		ECS_EVENT_ACTION:   action,
-		ECS_EVENT_SFTYPE:   sfType,
-		ECS_EVENT_START:    utils.ToIsoTimeStr(start),
-		ECS_EVENT_END:      utils.ToIsoTimeStr(end),
-		ECS_EVENT_DURATION: end - start,
+		ECS_EVENT_CATEGORY: 	category,
+		ECS_EVENT_TYPE:     	eventType,
+		ECS_EVENT_ACTION:   	action,
+		ECS_EVENT_SFTYPE:   	sfType,
+		ECS_EVENT_START:    	utils.ToIsoTimeStr(start),
+		ECS_EVENT_END:      	utils.ToIsoTimeStr(end),
+		ECS_EVENT_DURATION:  	end - start,
+		ECS_EVENT_OPFLAGSINT:	opFlags,
+		ECS_EVENT_OPFLAGS:		ops,
 	}
 
 	if rec.Ctx.IsAlert() {
