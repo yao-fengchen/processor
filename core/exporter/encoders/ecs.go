@@ -25,14 +25,8 @@ type JSONData map[string]interface{}
 // ECSRecord is a struct for serializing ECS records.
 type ECSRecord struct {
 	ID    string `json:"-"`
-	Ts    string `json:"@timestamp"`
-	Agent struct {
-		Type    string `json:"type,omitempty"`
-		Version string `json:"version,omitempty"`
-	} `json:"agent,omitempty"`
-	Ecs struct {
-		Version string `json:"version,omitempty"`
-	} `json:"ecs,omitempty"`
+	Ts    string `json:"timestamp"`
+	Head		 JSONData	`json:"head"`
 	Event        JSONData   `json:"event"`
 	Host         JSONData   `json:"host"`
 	Container    JSONData   `json:"container,omitempty"`
@@ -83,10 +77,8 @@ func (t *ECSEncoder) encode(rec *engine.Record) *ECSRecord {
 	ecs := &ECSRecord{
 		ID:   encodeID(rec),
 		Host: encodeHost(rec),
+		Head: encodeHead(rec),
 	}
-	ecs.Agent.Version = t.config.Version
-	ecs.Agent.Type = ECS_AGENT_TYPE
-	ecs.Ecs.Version = t.config.EcsVersion
 	ecs.Ts = utils.ToIsoTimeStr(engine.Mapper.MapInt(engine.SF_TS)(rec))
 
 	// encode specific record components
@@ -428,6 +420,14 @@ func encodeHost(rec *engine.Record) JSONData {
 	return JSONData{
 		ECS_HOST_ID: engine.Mapper.MapStr(engine.SF_NODE_ID)(rec),
 		ECS_HOST_IP: engine.Mapper.MapStr(engine.SF_NODE_IP)(rec),
+	}
+}
+
+// encodeHead creates the ECS host field
+func encodeHead(rec *engine.Record) JSONData {
+	return JSONData{
+		ECS_HEAD_TS: engine.Mapper.MapInt(engine.SF_TS)(rec),
+		ECS_HEAD_TYPE: engine.Mapper.MapStr(engine.SF_TYPE)(rec),
 	}
 }
 

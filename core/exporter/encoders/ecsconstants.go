@@ -15,6 +15,9 @@ const (
 	ECS_IMAGE_ID   = "id"
 	ECS_IMAGE_NAME = "name"
 
+	ECS_HEAD_TS = "ts"
+	ECS_HEAD_TYPE = "type"
+
 	ECS_HOST_ID = "id"
 	ECS_HOST_IP = "ip"
 
