@@ -1,22 +1,3 @@
-//
-// Copyright (C) 2020 IBM Corporation.
-//
-// Authors:
-// Andreas Schade <san@zurich.ibm.com>
-// Frederico Araujo <frederico.araujo@ibm.com>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 // Package encoders implements codecs for exporting records and events in different data formats.
 package encoders
 
@@ -477,21 +458,28 @@ func encodeProcess(rec *engine.Record) JSONData {
 		ECS_PROC_EXE:     exe,
 		ECS_PROC_ARGS:    engine.Mapper.MapStr(engine.SF_PROC_ARGS)(rec),
 		ECS_PROC_CMDLINE: engine.Mapper.MapStr(engine.SF_PROC_CMDLINE)(rec),
-		ECS_PROC_PID:     engine.Mapper.MapInt(engine.SF_PROC_PID)(rec),
 		ECS_PROC_START:   utils.ToIsoTimeStr(engine.Mapper.MapInt(engine.SF_PROC_CREATETS)(rec)),
 		ECS_PROC_NAME:    path.Base(exe),
 		ECS_PROC_THREAD:  JSONData{ECS_PROC_TID: engine.Mapper.MapInt(engine.SF_PROC_TID)(rec)},
 		ECS_PROC_TTY:	  engine.Mapper.MapInt(engine.SF_PROC_TTY)(rec) != 0,
+		ECS_PROC_OID:	  JSONData{
+			ECS_PROC_HPID:		engine.Mapper.MapInt(engine.SF_PROC_PID)(rec),
+			ECS_PROC_CREATETS:	engine.Mapper.MapInt(engine.SF_PROC_CREATETS)(rec),
+		},
 	}
 	pexe := engine.Mapper.MapStr(engine.SF_PPROC_EXE)(rec)
 	parent := JSONData{
 		ECS_PROC_EXE:     pexe,
 		ECS_PROC_ARGS:    engine.Mapper.MapStr(engine.SF_PPROC_ARGS)(rec),
 		ECS_PROC_CMDLINE: engine.Mapper.MapStr(engine.SF_PPROC_CMDLINE)(rec),
-		ECS_PROC_PID:     engine.Mapper.MapInt(engine.SF_PPROC_PID)(rec),
 		ECS_PROC_START:   utils.ToIsoTimeStr(engine.Mapper.MapInt(engine.SF_PPROC_CREATETS)(rec)),
 		ECS_PROC_NAME:    path.Base(pexe),
+		ECS_PROC_THREAD:  JSONData{ECS_PROC_TID: -1},
 		ECS_PROC_TTY:	  engine.Mapper.MapInt(engine.SF_PPROC_TTY)(rec) != 0,
+		ECS_PROC_OID:	  JSONData{
+			ECS_PROC_HPID:		engine.Mapper.MapInt(engine.SF_PPROC_PID)(rec),
+			ECS_PROC_CREATETS:	engine.Mapper.MapInt(engine.SF_PPROC_CREATETS)(rec),
+		},		
 	}
 	process[ECS_PROC_PARENT] = parent
 	return process
