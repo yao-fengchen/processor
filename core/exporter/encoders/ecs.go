@@ -34,7 +34,7 @@ type ECSRecord struct {
 	Pod          JSONData   `json:"pod,omitempty"`
 	Service      []JSONData `json:"service,omitempty"`
 	File         JSONData   `json:"file,omitempty"`
-	FileAction   JSONData   `json:"sf_file_action,omitempty"`
+	FileAction   JSONData   `json:"file_action,omitempty"`
 	Network      JSONData   `json:"network,omitempty"`
 	Source       JSONData   `json:"source,omitempty"`
 	Destination  JSONData   `json:"destination,omitempty"`
@@ -585,12 +585,15 @@ func encodeFile(rec *engine.Record) JSONData {
 	fpath := engine.Mapper.MapStr(engine.SF_FILE_PATH)(rec)
 	fd := engine.Mapper.MapInt(engine.SF_FILE_FD)(rec)
 	pid := engine.Mapper.MapInt(engine.SF_PROC_PID)(rec)
+	oid := engine.Mapper.MapStr(engine.SF_FILE_OID)(rec)
 
 	fileType := encodeFileType(ft)
 	if opFlags&sfgo.OP_SYMLINK == sfgo.OP_SYMLINK {
 		fileType = "symlink"
 	}
-	file := JSONData{ECS_FILE_TYPE: fileType}
+	file := JSONData{ECS_FILE_TYPE: fileType,
+					 ECS_FILE_OID: oid,
+	}
 
 	var name string
 	if fpath != sfgo.Zeros.String {

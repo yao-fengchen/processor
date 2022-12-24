@@ -9,7 +9,7 @@ const (
 	ECS_CONTAINER_ID      = "id"
 	ECS_CONTAINER_NAME    = "name"
 	ECS_CONTAINER_RUNTIME = "runtime"
-	ECS_CONTAINER_PRIV    = "sf_privileged"
+	ECS_CONTAINER_PRIV    = "privileged"
 
 	ECS_IMAGE      = "image"
 	ECS_IMAGE_ID   = "id"
@@ -36,6 +36,7 @@ const (
 	ECS_EVENT_OPFLAGSINT ="opflags_int"
 	ECS_EVENT_OPFLAGS  	 = "opflags"
 
+	ECS_FILE_OID	= "oid"
 	ECS_FILE_DIR    = "directory"
 	ECS_FILE_NAME   = "name"
 	ECS_FILE_PATH   = "path"
