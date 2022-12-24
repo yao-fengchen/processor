@@ -38,8 +38,8 @@ type ECSRecord struct {
 	Network      JSONData   `json:"network,omitempty"`
 	Source       JSONData   `json:"source,omitempty"`
 	Destination  JSONData   `json:"destination,omitempty"`
+	PProcess	 JSONData	`json:"pprocess,omitempy"`
 	Process      JSONData   `json:"process,omitempty"`
-	User         JSONData   `json:"user,omitempty"`
 	Tags         []string   `json:"tags,omitempty"`
 }
 
@@ -90,7 +90,7 @@ func (t *ECSEncoder) encode(rec *engine.Record) *ECSRecord {
 			ecs.encodePod(rec)
 		}
 		ecs.Process = encodeProcess(rec)
-		ecs.User = encodeUser(rec)
+		ecs.PProcess = encodePProcess(rec)
 	} else {
 		ecs.encodeOrchestrator(rec)
 	}
@@ -426,32 +426,35 @@ func encodeHost(rec *engine.Record) JSONData {
 // encodeHead creates the ECS host field
 func encodeHead(rec *engine.Record) JSONData {
 	return JSONData{
-		ECS_HEAD_TS: engine.Mapper.MapInt(engine.SF_TS)(rec),
-		ECS_HEAD_TYPE: engine.Mapper.MapStr(engine.SF_TYPE)(rec),
+		ECS_HEAD_TS:	engine.Mapper.MapInt(engine.SF_TS)(rec),
+		ECS_HEAD_ENDTS:	engine.Mapper.MapInt(engine.SF_ENDTS)(rec),
+		ECS_HEAD_TYPE:	engine.Mapper.MapStr(engine.SF_TYPE)(rec),
 	}
 }
 
-// encodeUser creates an ECS user field using user and group of the actual process.
-func encodeUser(rec *engine.Record) JSONData {
-	gname := engine.Mapper.MapStr(engine.SF_PROC_GROUP)(rec)
-	group := JSONData{
-		ECS_GROUP_ID: engine.Mapper.MapInt(engine.SF_PROC_GID)(rec),
+// encodePProcess creates an ECS parent process field.
+func encodePProcess(rec *engine.Record) JSONData {
+	pexe := engine.Mapper.MapStr(engine.SF_PPROC_EXE)(rec)
+	pprocess := JSONData{
+		ECS_PROC_EXE:     pexe,
+		ECS_PROC_ARGS:    engine.Mapper.MapStr(engine.SF_PPROC_ARGS)(rec),
+		ECS_PROC_CMDLINE: engine.Mapper.MapStr(engine.SF_PPROC_CMDLINE)(rec),
+		ECS_PROC_START:   utils.ToIsoTimeStr(engine.Mapper.MapInt(engine.SF_PPROC_CREATETS)(rec)),
+		ECS_PROC_NAME:    path.Base(pexe),
+		ECS_PROC_TTY:	  engine.Mapper.MapInt(engine.SF_PPROC_TTY)(rec) != 0,
+		ECS_PROC_OID:	  JSONData{
+			ECS_PROC_HPID:		engine.Mapper.MapInt(engine.SF_PPROC_PID)(rec),
+			ECS_PROC_CREATETS:	engine.Mapper.MapInt(engine.SF_PPROC_CREATETS)(rec),
+		},
+		ECS_PROC_UID:     engine.Mapper.MapInt(engine.SF_PPROC_UID)(rec),
+		ECS_PROC_USER: 	  engine.Mapper.MapStr(engine.SF_PPROC_USER)(rec),
+		ECS_PROC_GID:	  engine.Mapper.MapInt(engine.SF_PPROC_GID)(rec),
+		ECS_PROC_GROUP:   engine.Mapper.MapStr(engine.SF_PPROC_GROUP)(rec),
 	}
-	if gname != sfgo.Zeros.String {
-		group[ECS_GROUP_NAME] = gname
-	}
-	uname := engine.Mapper.MapStr(engine.SF_PROC_USER)(rec)
-	user := JSONData{
-		ECS_GROUP:   group,
-		ECS_USER_ID: engine.Mapper.MapInt(engine.SF_PROC_UID)(rec),
-	}
-	if uname != sfgo.Zeros.String {
-		user[ECS_USER_NAME] = uname
-	}
-	return user
+	return pprocess
 }
 
-// encodeProcess creates an ECS process field including the nested parent process.
+// encodeProcess creates an ECS process field.
 func encodeProcess(rec *engine.Record) JSONData {
 	exe := engine.Mapper.MapStr(engine.SF_PROC_EXE)(rec)
 	process := JSONData{
@@ -460,28 +463,18 @@ func encodeProcess(rec *engine.Record) JSONData {
 		ECS_PROC_CMDLINE: engine.Mapper.MapStr(engine.SF_PROC_CMDLINE)(rec),
 		ECS_PROC_START:   utils.ToIsoTimeStr(engine.Mapper.MapInt(engine.SF_PROC_CREATETS)(rec)),
 		ECS_PROC_NAME:    path.Base(exe),
-		ECS_PROC_THREAD:  JSONData{ECS_PROC_TID: engine.Mapper.MapInt(engine.SF_PROC_TID)(rec)},
+		ECS_PROC_TID:     engine.Mapper.MapInt(engine.SF_PROC_TID)(rec),
 		ECS_PROC_TTY:	  engine.Mapper.MapInt(engine.SF_PROC_TTY)(rec) != 0,
 		ECS_PROC_OID:	  JSONData{
 			ECS_PROC_HPID:		engine.Mapper.MapInt(engine.SF_PROC_PID)(rec),
 			ECS_PROC_CREATETS:	engine.Mapper.MapInt(engine.SF_PROC_CREATETS)(rec),
 		},
+		ECS_PROC_UID:     engine.Mapper.MapInt(engine.SF_PROC_UID)(rec),
+		ECS_PROC_USER: 	  engine.Mapper.MapStr(engine.SF_PROC_USER)(rec),
+		ECS_PROC_GID:	  engine.Mapper.MapInt(engine.SF_PROC_GID)(rec),
+		ECS_PROC_GROUP:   engine.Mapper.MapStr(engine.SF_PROC_GROUP)(rec),
+		ECS_PROC_ANAME:	  engine.Mapper.MapStr(engine.SF_PROC_ANAME)(rec),
 	}
-	pexe := engine.Mapper.MapStr(engine.SF_PPROC_EXE)(rec)
-	parent := JSONData{
-		ECS_PROC_EXE:     pexe,
-		ECS_PROC_ARGS:    engine.Mapper.MapStr(engine.SF_PPROC_ARGS)(rec),
-		ECS_PROC_CMDLINE: engine.Mapper.MapStr(engine.SF_PPROC_CMDLINE)(rec),
-		ECS_PROC_START:   utils.ToIsoTimeStr(engine.Mapper.MapInt(engine.SF_PPROC_CREATETS)(rec)),
-		ECS_PROC_NAME:    path.Base(pexe),
-		ECS_PROC_THREAD:  JSONData{ECS_PROC_TID: -1},
-		ECS_PROC_TTY:	  engine.Mapper.MapInt(engine.SF_PPROC_TTY)(rec) != 0,
-		ECS_PROC_OID:	  JSONData{
-			ECS_PROC_HPID:		engine.Mapper.MapInt(engine.SF_PPROC_PID)(rec),
-			ECS_PROC_CREATETS:	engine.Mapper.MapInt(engine.SF_PPROC_CREATETS)(rec),
-		},		
-	}
-	process[ECS_PROC_PARENT] = parent
 	return process
 }
 
