@@ -490,61 +490,61 @@ func encodeEvent(rec *engine.Record, category string, eventType string, action s
 	opFlags := rec.GetInt(sfgo.EV_PROC_OPFLAGS_INT, sfgo.SYSFLOW_SRC)
 	var ops string = ""
 	if opFlags&sfgo.OP_CLONE == sfgo.OP_CLONE {
-		ops = ops + "clone "
+		ops = ops + "CLONE "
 	} 
 	if opFlags&sfgo.OP_EXEC == sfgo.OP_EXEC {
-		ops = ops + "exec "
+		ops = ops + "EXEC "
 	} 
 	if opFlags&sfgo.OP_EXIT == sfgo.OP_EXIT {
-		ops = ops + "exit "
+		ops = ops + "EXIT "
 	} 
 	if opFlags&sfgo.OP_SETUID == sfgo.OP_SETUID {
-		ops = ops + "setuid "
+		ops = ops + "SETUID "
 	} 
 	if opFlags&sfgo.OP_SETNS == sfgo.OP_SETNS {
-		ops = ops + "setns "
+		ops = ops + "SETNS "
 	} 
 	if opFlags&sfgo.OP_ACCEPT == sfgo.OP_ACCEPT {
-		ops = ops + "accept "
+		ops = ops + "ACCEPT "
 	} 
 	if opFlags&sfgo.OP_READ_RECV == sfgo.OP_READ_RECV {
-		ops = ops + "read_recv "
+		ops = ops + "READ_RECV "
 	} 
 	if opFlags&sfgo.OP_WRITE_SEND == sfgo.OP_WRITE_SEND {
-		ops = ops + "write_send "
+		ops = ops + "WRITE_SEND "
 	} 
 	if opFlags&sfgo.OP_CLOSE == sfgo.OP_CLOSE {
-		ops = ops + "close "
+		ops = ops + "CLOSE "
 	} 
 	if opFlags&sfgo.OP_TRUNCATE == sfgo.OP_TRUNCATE {
-		ops = ops + "truncate "
+		ops = ops + "TRUNCATE "
 	} 
 	if opFlags&sfgo.OP_SHUTDOWN == sfgo.OP_SHUTDOWN {
-		ops = ops + "shutdown "
+		ops = ops + "SHUTDOWN "
 	} 
 	if opFlags&sfgo.OP_MMAP == sfgo.OP_MMAP {
-		ops = ops + "mmap "
+		ops = ops + "MMAP "
 	} 
 	if opFlags&sfgo.OP_DIGEST == sfgo.OP_DIGEST {
-		ops = ops + "digest "
+		ops = ops + "DIGEST "
 	} 
 	if opFlags&sfgo.OP_MKDIR == sfgo.OP_MKDIR {
-		ops = ops + "mkdir "
+		ops = ops + "MKDIR "
 	} 
 	if opFlags&sfgo.OP_RMDIR == sfgo.OP_MKDIR {
-		ops = ops + "rmdir "
+		ops = ops + "RMDIR "
 	} 
 	if opFlags&sfgo.OP_LINK == sfgo.OP_LINK {
-		ops = ops + "link "
+		ops = ops + "LINK "
 	} 
 	if opFlags&sfgo.OP_UNLINK == sfgo.OP_UNLINK {
-		ops = ops + "unlink "
+		ops = ops + "UNLINK "
 	} 
 	if opFlags&sfgo.OP_SYMLINK == sfgo.OP_SYMLINK {
-		ops = ops + "symlink "
+		ops = ops + "SYMLINK "
 	} 
 	if opFlags&sfgo.OP_RENAME == sfgo.OP_RENAME {
-		ops = ops + "rename "
+		ops = ops + "RENAME "
 	} 
 
 	event := JSONData{
