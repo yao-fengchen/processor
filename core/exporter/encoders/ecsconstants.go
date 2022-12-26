@@ -38,6 +38,7 @@ const (
 	ECS_EVENT_OPFLAGS  	 = "opflags"
 
 	ECS_FILE_OID	= "oid"
+	ECS_FILE_NEWPATH= "newpath"
 	ECS_FILE_DIR    = "directory"
 	ECS_FILE_NAME   = "name"
 	ECS_FILE_PATH   = "path"

@@ -579,6 +579,7 @@ func encodeFile(rec *engine.Record) JSONData {
 	fd := engine.Mapper.MapInt(engine.SF_FILE_FD)(rec)
 	pid := engine.Mapper.MapInt(engine.SF_PROC_PID)(rec)
 	oid := engine.Mapper.MapStr(engine.SF_FILE_OID)(rec)
+	newpath := engine.Mapper.MapStr(engine.SF_FILE_NEWPATH)(rec)
 
 	fileType := encodeFileType(ft)
 	if opFlags&sfgo.OP_SYMLINK == sfgo.OP_SYMLINK {
@@ -586,6 +587,7 @@ func encodeFile(rec *engine.Record) JSONData {
 	}
 	file := JSONData{ECS_FILE_TYPE: fileType,
 					 ECS_FILE_OID: oid,
+					 ECS_FILE_NEWPATH: newpath,
 	}
 
 	var name string
