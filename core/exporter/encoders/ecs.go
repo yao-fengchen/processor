@@ -175,7 +175,7 @@ func (ecs *ECSRecord) encodeNetworkFlow(rec *engine.Record) {
 	rops := engine.Mapper.MapInt(engine.SF_FLOW_ROPS)(rec)
 	wbytes := engine.Mapper.MapInt(engine.SF_FLOW_WBYTES)(rec)
 	wops := engine.Mapper.MapInt(engine.SF_FLOW_WOPS)(rec)
-	// gaptime := engine.Mapper.MapInt(engine.SF_FLOW_GAPTIME)(rec)
+	gaptime := engine.Mapper.MapInt(engine.SF_FLOW_GAPTIME)(rec)
 	sip := engine.Mapper.MapStr(engine.SF_NET_SIP)(rec)
 	dip := engine.Mapper.MapStr(engine.SF_NET_DIP)(rec)
 	sport := engine.Mapper.MapInt(engine.SF_NET_SPORT)(rec)
@@ -187,22 +187,22 @@ func (ecs *ECSRecord) encodeNetworkFlow(rec *engine.Record) {
 
 	// Calculate Base64-encoded value
 	ecs.Network = JSONData{
-		ECS_NET_BYTES: rbytes + wbytes,
-		ECS_NET_CID:   cid.CalcBase64(ft),
-		ECS_NET_IANA:  strconv.FormatInt(proto, 10),
-		ECS_NET_PROTO: sfgo.GetProto(proto),
+		ECS_NET_RBYTES:  rbytes,
+		ECS_NET_WBYTES:  wbytes,
+		ECS_NET_CID:     cid.CalcBase64(ft),
+		ECS_NET_IANA:    strconv.FormatInt(proto, 10),
+		ECS_NET_PROTO: 	 sfgo.GetProto(proto),
+		ECS_NET_GAPTIME: gaptime,
 	}
 	ecs.Source = JSONData{
 		ECS_ENDPOINT_IP:      sip,
 		ECS_ENDPOINT_PORT:    sport,
-		ECS_ENDPOINT_ADDR:    sip,
 		ECS_ENDPOINT_BYTES:   wbytes,
 		ECS_ENDPOINT_PACKETS: wops,
 	}
 	ecs.Destination = JSONData{
 		ECS_ENDPOINT_IP:      dip,
 		ECS_ENDPOINT_PORT:    dport,
-		ECS_ENDPOINT_ADDR:    dip,
 		ECS_ENDPOINT_BYTES:   rbytes,
 		ECS_ENDPOINT_PACKETS: rops,
 	}
@@ -575,11 +575,64 @@ func encodeEvent(rec *engine.Record, category string, eventType string, action s
 func encodeFile(rec *engine.Record) JSONData {
 	opFlags := rec.GetInt(sfgo.EV_PROC_OPFLAGS_INT, sfgo.SYSFLOW_SRC)
 	ft := engine.Mapper.MapStr(engine.SF_FILE_TYPE)(rec)
+	ft_char := engine.Mapper.MapInt(engine.SF_FILE_TYPE)(rec)
 	fpath := engine.Mapper.MapStr(engine.SF_FILE_PATH)(rec)
 	fd := engine.Mapper.MapInt(engine.SF_FILE_FD)(rec)
 	pid := engine.Mapper.MapInt(engine.SF_PROC_PID)(rec)
 	oid := engine.Mapper.MapStr(engine.SF_FILE_OID)(rec)
+	newoid := engine.Mapper.MapStr(engine.SF_FILE_NEWOID)(rec)
 	newpath := engine.Mapper.MapStr(engine.SF_FILE_NEWPATH)(rec)
+	is_open_read := engine.Mapper.MapInt(engine.SF_FILE_IS_OPEN_READ)(rec) != 0
+	is_open_write := engine.Mapper.MapInt(engine.SF_FILE_IS_OPEN_WRITE)(rec) != 0
+	openflags_int := engine.Mapper.MapInt(engine.SF_FILE_OPENFLAGS)(rec)
+	var opens string = ""
+	if openflags_int == sfgo.O_NONE {
+		opens = "O_NONE "
+	} else {
+		if openflags_int&sfgo.O_RDWR == sfgo.O_RDWR {
+			opens = "O_WRONLY "
+		} else if openflags_int&sfgo.O_RDONLY == sfgo.O_RDONLY {
+			opens = "O_RDONLY "
+		} else if openflags_int&sfgo.O_WRONLY == sfgo.O_WRONLY {
+			opens = "O_WRONLY "
+		}
+		if openflags_int&sfgo.O_CREAT == sfgo.O_CREAT {
+			opens = opens + "O_CREAT "
+		}
+		if openflags_int&sfgo.O_APPEND == sfgo.O_APPEND {
+			opens = opens + "O_CREAT "
+		}
+		if openflags_int&sfgo.O_CREAT == sfgo.O_CREAT {
+			opens = opens + "O_APPEND "
+		}
+		if openflags_int&sfgo.O_DSYNC == sfgo.O_DSYNC {
+			opens = opens + "O_DSYNC "
+		}
+		if openflags_int&sfgo.O_EXCL == sfgo.O_EXCL {
+			opens = opens + "O_EXCL "
+		}
+		if openflags_int&sfgo.O_NONBLOCK == sfgo.O_NONBLOCK {
+			opens = opens + "O_NONBLOCK "
+		}
+		if openflags_int&sfgo.O_SYNC == sfgo.O_SYNC {
+			opens = opens + "O_SYNC "
+		}
+		if openflags_int&sfgo.O_TRUNC == sfgo.O_TRUNC {
+			opens = opens + "O_TRUNC "
+		}
+		if openflags_int&sfgo.O_DIRECT == sfgo.O_DIRECT {
+			opens = opens + "O_DIRECT "
+		}
+		if openflags_int&sfgo.O_DIRECTORY == sfgo.O_DIRECTORY {
+			opens = opens + "O_DIRECTORY "
+		}
+		if openflags_int&sfgo.O_LARGEFILE == sfgo.O_LARGEFILE {
+			opens = opens + "O_LARGEFILE "
+		}
+		if openflags_int&sfgo.O_CLOEXEC == sfgo.O_CLOEXEC {
+			opens = opens + "O_CLOEXEC "
+		}
+	}
 
 	fileType := encodeFileType(ft)
 	if opFlags&sfgo.OP_SYMLINK == sfgo.OP_SYMLINK {
@@ -587,7 +640,13 @@ func encodeFile(rec *engine.Record) JSONData {
 	}
 	file := JSONData{ECS_FILE_TYPE: fileType,
 					 ECS_FILE_OID: oid,
+					 ECS_FILE_NEW_OID: newoid,
 					 ECS_FILE_NEWPATH: newpath,
+					 ECS_FILE_OPENFLAGS_INT: openflags_int,
+					 ECS_FILE_OPENFLAGS: opens,
+					 ECS_FILE_IS_OPEN_READ: is_open_read,
+					 ECS_FILE_IS_OPEN_WRITE: is_open_write,
+					 ECS_FILE_TYPECHAR: ft_char,
 	}
 
 	var name string
