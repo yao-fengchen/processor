@@ -277,6 +277,8 @@ func getExportedMappers() map[string]*FieldEntry {
 		SF_PROC_PID:      &FieldEntry{Map: mapInt(sfgo.SYSFLOW_SRC, sfgo.PROC_OID_HPID_INT), FlatIndex: sfgo.PROC_OID_HPID_INT, Type: MapIntVal, Source: sfgo.SYSFLOW_SRC, Section: SectProc},
 		SF_PROC_NAME:     &FieldEntry{Map: mapName(sfgo.SYSFLOW_SRC, sfgo.PROC_EXE_STR), FlatIndex: sfgo.PROC_EXE_STR, Type: MapSpecialStr, Source: sfgo.SYSFLOW_SRC, Section: SectProc},
 		SF_PROC_EXE:      &FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.PROC_EXE_STR), FlatIndex: sfgo.PROC_EXE_STR, Type: MapStrVal, Source: sfgo.SYSFLOW_SRC, Section: SectProc},
+		SF_PROC_OLDNAME:  &FieldEntry{Map: mapName(sfgo.SYSFLOW_SRC, sfgo.PROC_OLD_EXE_STR), FlatIndex: sfgo.PROC_OLD_EXE_STR, Type: MapSpecialStr, Source: sfgo.SYSFLOW_SRC, Section: SectProc},
+		SF_PROC_OLDEXE:   &FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.PROC_OLD_EXE_STR), FlatIndex: sfgo.PROC_OLD_EXE_STR, Type: MapStrVal, Source: sfgo.SYSFLOW_SRC, Section: SectProc},
 		SF_PROC_ARGS:     &FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.PROC_EXEARGS_STR), FlatIndex: sfgo.PROC_EXEARGS_STR, Type: MapStrVal, Source: sfgo.SYSFLOW_SRC, Section: SectProc},
 		SF_PROC_UID:      &FieldEntry{Map: mapInt(sfgo.SYSFLOW_SRC, sfgo.PROC_UID_INT), FlatIndex: sfgo.PROC_UID_INT, Type: MapIntVal, Source: sfgo.SYSFLOW_SRC, Section: SectProc},
 		SF_PROC_USER:     &FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.PROC_USERNAME_STR), FlatIndex: sfgo.PROC_USERNAME_STR, Type: MapStrVal, Source: sfgo.SYSFLOW_SRC, Section: SectProc},

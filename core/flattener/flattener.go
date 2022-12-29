@@ -22,6 +22,7 @@
 package flattener
 
 import (
+	"fmt"
 	"encoding/hex"
 	"encoding/json"
 	"strings"
@@ -52,6 +53,10 @@ type Flattener struct {
 	filter *Filter
 	outCh  []chan *sfgo.FlatRecord
 }
+
+var fileMap			= make(map[string]string)
+var poidRead 		= make(map[string]string)
+var poidWrite 		= make(map[string]string)
 
 // NewFlattener creates a new Flattener instance.
 func NewFlattener() plugins.SFHandler {
@@ -180,7 +185,6 @@ func (s *Flattener) HandleNetFlow(sf *plugins.CtxSysFlow, nf *sfgo.NetworkFlow) 
 func (s *Flattener) HandleFileFlow(sf *plugins.CtxSysFlow, ff *sfgo.FileFlow) error {
 	fr := newFlatRecord()
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.SF_REC_TYPE] = sfgo.FILE_FLOW
-	s.fillEntities(sf.Header, sf.Pod, sf.Container, sf.Process, sf.File, fr)
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_FILE_TS_INT] = ff.Ts
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_FILE_TID_INT] = ff.Tid
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_FILE_OPFLAGS_INT] = int64(ff.OpFlags)
@@ -194,6 +198,24 @@ func (s *Flattener) HandleFileFlow(sf *plugins.CtxSysFlow, ff *sfgo.FileFlow) er
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.FL_FILE_GAPTIME_INT] = ff.GapTime
 	fr.Ptree = sf.PTree
 	fr.GraphletID = sf.GraphletID
+	opFlags := int64(ff.OpFlags)
+	rbytes := ff.NumRRecvBytes
+	rops := ff.NumRRecvOps
+	wbytes := ff.NumWSendBytes
+	wops := ff.NumWSendOps
+	poid := fmt.Sprintf("%d", sf.Process.Oid.Hpid) + fmt.Sprintf("%d", sf.Process.Oid.CreateTS)
+	if opFlags&sfgo.OP_READ_RECV == sfgo.OP_READ_RECV && (rbytes > 0 || rops > 0) {
+		poidRead[poid] = sf.File.Path
+		if v, ok := poidWrite[poid]; ok {
+			fileMap[sf.Container.Id + v] = sf.File.Path
+		}
+	} else if opFlags&sfgo.OP_WRITE_SEND == sfgo.OP_WRITE_SEND && (wbytes > 0 || wops > 0) {
+		poidWrite[poid] = sf.File.Path
+		if v, ok := poidRead[poid]; ok {
+			fileMap[sf.Container.Id + sf.File.Path] = v
+		}		
+	}
+	s.fillEntities(sf.Header, sf.Pod, sf.Container, sf.Process, sf.File, fr)
 	s.out(fr)
 	return nil
 }
@@ -221,13 +243,28 @@ func (s *Flattener) HandleFileEvt(sf *plugins.CtxSysFlow, fe *sfgo.FileEvent) er
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.SEC_FILE_OID_STR] = sfgo.Zeros.String
 	}
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.SF_REC_TYPE] = sfgo.FILE_EVT
-	s.fillEntities(sf.Header, sf.Pod, sf.Container, sf.Process, sf.File, fr)
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.EV_FILE_TS_INT] = fe.Ts
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.EV_FILE_TID_INT] = fe.Tid
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.EV_FILE_OPFLAGS_INT] = int64(fe.OpFlags)
 	fr.Ints[sfgo.SYSFLOW_IDX][sfgo.EV_FILE_RET_INT] = int64(fe.Ret)
 	fr.Ptree = sf.PTree
 	fr.GraphletID = sf.GraphletID
+	opFlags := int64(fe.OpFlags)
+	if opFlags&sfgo.OP_SYMLINK == sfgo.OP_SYMLINK || opFlags&sfgo.OP_LINK == sfgo.OP_LINK {
+		linkSource := sf.File.Path
+		args := strings.Fields(sf.Process.ExeArgs)
+		newname := ""
+		if len(args) > 0 {
+			newname = args[len(args) - 1]
+		}
+		linkDestination := sf.NewFile.Path + newname
+		if v, ok := fileMap[sf.Container.Id + linkSource]; ok {
+			fileMap[sf.Container.Id + linkDestination] = v
+		} else {
+			fileMap[sf.Container.Id + linkDestination] = linkSource
+		}
+	}
+	s.fillEntities(sf.Header, sf.Pod, sf.Container, sf.Process, sf.File, fr)
 	s.out(fr)
 	return nil
 }
@@ -352,6 +389,16 @@ func (s *Flattener) fillEntities(hdr *sfgo.SFHeader, pod *sfgo.Pod, cont *sfgo.C
 		} else {
 			fr.Strs[sfgo.SYSFLOW_IDX][sfgo.PROC_CONTAINERID_STRING_STR] = sfgo.Zeros.String
 		}
+		if cont != nil {
+			if v, ok := fileMap[cont.Id + proc.Exe]; ok {
+				fr.Strs[sfgo.SYSFLOW_IDX][sfgo.PROC_OLD_EXE_STR] = v
+			} else {
+				fr.Strs[sfgo.SYSFLOW_IDX][sfgo.PROC_OLD_EXE_STR] = sfgo.Zeros.String
+			}			
+		} else {
+			fr.Strs[sfgo.SYSFLOW_IDX][sfgo.PROC_OLD_EXE_STR] = sfgo.Zeros.String
+		}
+
 	} else {
 		logger.Warn.Println("Event does not have a related process.  This should not happen.")
 		fr.Ints[sfgo.SYSFLOW_IDX][sfgo.PROC_STATE_INT] = sfgo.Zeros.Int64

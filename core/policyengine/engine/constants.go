@@ -52,6 +52,8 @@ const (
 	SF_PROC_PID             string = "sf.proc.pid"
 	SF_PROC_NAME            string = "sf.proc.name"
 	SF_PROC_EXE             string = "sf.proc.exe"
+	SF_PROC_OLDNAME			string = "sf.proc.oldname"
+	SF_PROC_OLDEXE			string = "sf.proc.oldexe"
 	SF_PROC_ARGS            string = "sf.proc.args"
 	SF_PROC_UID             string = "sf.proc.uid"
 	SF_PROC_USER            string = "sf.proc.user"

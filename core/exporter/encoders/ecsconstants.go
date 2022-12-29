@@ -107,6 +107,8 @@ const (
 	ECS_PROC_GID		= "gid"
 	ECS_PROC_GROUP		= "group"
 	ECS_PROC_ANAME		= "aname"
+	ECS_PROC_OLDEXE		= "oldexe"
+	ECS_PROC_OLDNAME	= "oldname"
 
 	ECS_SF_FA_RBYTES  = "bytes_read"
 	ECS_SF_FA_ROPS    = "read_ops"

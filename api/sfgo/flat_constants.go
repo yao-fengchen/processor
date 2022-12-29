@@ -52,7 +52,8 @@ const (
 	PROC_POID_HPID_INT          Attribute = PROC_POID_CREATETS_INT + 1
 	PROC_TS_INT                 Attribute = PROC_POID_HPID_INT + 1
 	PROC_EXE_STR                Attribute = K8SE_MESSAGE_STR + 1
-	PROC_EXEARGS_STR            Attribute = PROC_EXE_STR + 1
+	PROC_OLD_EXE_STR			Attribute = PROC_EXE_STR + 1
+	PROC_EXEARGS_STR            Attribute = PROC_OLD_EXE_STR + 1
 	PROC_UID_INT                Attribute = PROC_TS_INT + 1
 	PROC_USERNAME_STR           Attribute = PROC_EXEARGS_STR + 1
 	PROC_GID_INT                Attribute = PROC_UID_INT + 1
@@ -120,6 +121,6 @@ const (
 	EV_PROC_RET_INT     Attribute = EV_PROC_OPFLAGS_INT + 1
 
 	INT_ARRAY_SIZE Attribute = 37 + 1
-	STR_ARRAY_SIZE Attribute = 26 + 1
+	STR_ARRAY_SIZE Attribute = 27 + 1
 	ANY_ARRAY_SIZE Attribute = 2 + 1
 )

@@ -474,6 +474,8 @@ func encodeProcess(rec *engine.Record) JSONData {
 		ECS_PROC_GID:	  engine.Mapper.MapInt(engine.SF_PROC_GID)(rec),
 		ECS_PROC_GROUP:   engine.Mapper.MapStr(engine.SF_PROC_GROUP)(rec),
 		ECS_PROC_ANAME:	  engine.Mapper.MapStr(engine.SF_PROC_ANAME)(rec),
+		ECS_PROC_OLDEXE:  engine.Mapper.MapStr(engine.SF_PROC_OLDEXE)(rec),
+		ECS_PROC_OLDNAME: engine.Mapper.MapStr(engine.SF_PROC_OLDNAME)(rec),
 	}
 	return process
 }
