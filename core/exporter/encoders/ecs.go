@@ -38,7 +38,7 @@ type ECSRecord struct {
 	Network      JSONData   `json:"network,omitempty"`
 	Source       JSONData   `json:"source,omitempty"`
 	Destination  JSONData   `json:"destination,omitempty"`
-	PProcess	 JSONData	`json:"pprocess,omitempy"`
+	PProcess	 JSONData	`json:"pprocess,omitempty"`
 	Process      JSONData   `json:"process,omitempty"`
 	Tags         []string   `json:"tags,omitempty"`
 }
