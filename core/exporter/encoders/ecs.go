@@ -420,6 +420,7 @@ func encodeContainer(rec *engine.Record) JSONData {
 			image := JSONData{
 				ECS_IMAGE_ID:   imageid,
 				ECS_IMAGE_NAME: engine.Mapper.MapStr(engine.SF_CONTAINER_IMAGE)(rec),
+				ECS_IMAGE_REPO: engine.Mapper.MapStr(engine.SF_CONTAINER_IMAGEREPO)(rec),
 			}
 			container[ECS_IMAGE] = image
 		}

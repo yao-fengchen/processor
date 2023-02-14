@@ -319,6 +319,7 @@ func (s *Flattener) fillEntities(hdr *sfgo.SFHeader, pod *sfgo.Pod, cont *sfgo.C
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_NAME_STR] = strings.TrimSpace(cont.Name)
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_IMAGE_STR] = strings.TrimSpace(cont.Image)
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_IMAGEID_STR] = cont.Imageid
+		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_IMAGEREPO_STR] = cont.Imagerepo
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_MOUNT_SOURCE_STR] = cont.MountSource
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_MOUNT_DEST_STR] = cont.MountDest
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_MOUNT_MODE_STR] = cont.MountMode

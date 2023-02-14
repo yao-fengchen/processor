@@ -116,6 +116,7 @@ const (
 	SF_CONTAINER_ID         string = "sf.container.id"
 	SF_CONTAINER_NAME       string = "sf.container.name"
 	SF_CONTAINER_IMAGEID    string = "sf.container.imageid"
+	SF_CONTAINER_IMAGEREPO		string = "sf.container.imagerepo"
 	SF_CONTAINER_MOUNT_SOURCE		string = "sf.container.mountsource"
 	SF_CONTAINER_MOUNT_DEST			string = "sf.container.mountdest"
 	SF_CONTAINER_MOUNT_MODE			string = "sf.container.mountmode"

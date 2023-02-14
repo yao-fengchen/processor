@@ -13,6 +13,7 @@ const (
 
 	ECS_IMAGE      = "image"
 	ECS_IMAGE_ID   = "id"
+	ECS_IMAGE_REPO = "repo"
 	ECS_MOUNT_SOURCE		= "mountsource"
 	ECS_MOUNT_DEST			= "mountdest"
 	ECS_MOUNT_MODE			= "mountmode"

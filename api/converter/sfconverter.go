@@ -61,6 +61,7 @@ func (s *SFObjectConverter) createContainer(cont map[string]interface{}) *sfgo.C
 		Name:       cont[cContName].(string),
 		Image:      cont[cContImage].(string),
 		Imageid:    cont[cContImageID].(string),
+		Imagerepo:   cont[cContImagerepo].(string),
 		MountSource: cont[cContMountSource].(string),
 		MountDest:   cont[cContMountDest].(string),
 		MountMode:   cont[cContMountMode].(string),
