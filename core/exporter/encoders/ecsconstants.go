@@ -67,11 +67,12 @@ const (
 	ECS_NET_IANA  	= "iana_number"
 	ECS_NET_PROTO 	= "protocol"
 	ECS_NET_GAPTIME = "gap_time"
+	ECS_NET_DURATION="duration"
 
 	// used in source and destination fields
 	ECS_ENDPOINT_BYTES   = "bytes"
 	ECS_ENDPOINT_IP      = "ip"
-	ECS_ENDPOINT_PACKETS = "packets"
+	ECS_ENDPOINT_PACKETS = "operations"
 	ECS_ENDPOINT_PORT    = "port"
 
 	ECS_ORCHESTRATOR_NAMESPACE = "namespace"
@@ -115,6 +116,7 @@ const (
 	ECS_SF_FA_WBYTES  = "bytes_written"
 	ECS_SF_FA_WOPS    = "write_ops"
 	ECS_SF_FA_GAPTIME = "gap_time"
+	ECS_SF_FA_DURATION="duration"
 
 	ECS_SERVICE_ID         = "id"
 	ECS_SERVICE_NAME       = "name"

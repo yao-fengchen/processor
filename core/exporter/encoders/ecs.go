@@ -176,11 +176,14 @@ func (ecs *ECSRecord) encodeNetworkFlow(rec *engine.Record) {
 	wbytes := engine.Mapper.MapInt(engine.SF_FLOW_WBYTES)(rec)
 	wops := engine.Mapper.MapInt(engine.SF_FLOW_WOPS)(rec)
 	gaptime := engine.Mapper.MapInt(engine.SF_FLOW_GAPTIME)(rec)
+	dutation := engine.Mapper.MapInt(engine.SF_FLOW_DURATION)(rec)
 	sip := engine.Mapper.MapStr(engine.SF_NET_SIP)(rec)
 	dip := engine.Mapper.MapStr(engine.SF_NET_DIP)(rec)
 	sport := engine.Mapper.MapInt(engine.SF_NET_SPORT)(rec)
 	dport := engine.Mapper.MapInt(engine.SF_NET_DPORT)(rec)
 	proto := engine.Mapper.MapInt(engine.SF_NET_PROTO)(rec)
+	// shostname := engine.Mapper.MapStr(engine.SF_NET_SOURCE_HOST_NAME)(rec)
+	// dhostname := engine.Mapper.MapStr(engine.SF_NET_DEST_HOST_NAME)(rec)
 
 	cid, _ := gommunityid.GetCommunityIDByVersion(1, 0)
 	ft := gommunityid.MakeFlowTuple(net.ParseIP(sip), net.ParseIP(dip), uint16(sport), uint16(dport), uint8(proto))
@@ -193,6 +196,9 @@ func (ecs *ECSRecord) encodeNetworkFlow(rec *engine.Record) {
 		ECS_NET_IANA:    strconv.FormatInt(proto, 10),
 		ECS_NET_PROTO: 	 sfgo.GetProto(proto),
 		ECS_NET_GAPTIME: gaptime,
+		ECS_NET_DURATION:dutation,
+		// "shostname": shostname,
+		// "dhostname": dhostname,
 	}
 	ecs.Source = JSONData{
 		ECS_ENDPOINT_IP:      sip,
@@ -217,6 +223,7 @@ func (ecs *ECSRecord) encodeFileFlow(rec *engine.Record) {
 	wbytes := engine.Mapper.MapInt(engine.SF_FLOW_WBYTES)(rec)
 	wops := engine.Mapper.MapInt(engine.SF_FLOW_WOPS)(rec)
 	gaptime := engine.Mapper.MapInt(engine.SF_FLOW_GAPTIME)(rec)
+	duration := engine.Mapper.MapInt(engine.SF_FLOW_DURATION)(rec)
 	category := ECS_CAT_FILE
 	eventType := ECS_TYPE_ACCESS
 	action := category + "-" + eventType
@@ -236,6 +243,7 @@ func (ecs *ECSRecord) encodeFileFlow(rec *engine.Record) {
 			ECS_SF_FA_WBYTES:  wbytes,
 			ECS_SF_FA_WOPS:    wops,
 			ECS_SF_FA_GAPTIME: gaptime,
+			ECS_SF_FA_DURATION:duration,
 		}
 	}
 }

@@ -39,6 +39,8 @@ type FileFlow struct {
 	NumWSendBytes int64 `json:"numWSendBytes"`
 
 	GapTime int64 `json:"gapTime"`
+
+	Duration int64 `json:"duration"`
 }
 
 const FileFlowAvroCRC64Fingerprint = "\xb0\x9a\xb1-\x80\x85G\\"
@@ -130,6 +132,10 @@ func writeFileFlow(r *FileFlow, w io.Writer) error {
 	if err != nil {
 		return err
 	}
+	err = vm.WriteLong(r.Duration, w)
+	if err != nil {
+		return err
+	}
 	return err
 }
 
@@ -138,7 +144,7 @@ func (r *FileFlow) Serialize(w io.Writer) error {
 }
 
 func (r *FileFlow) Schema() string {
-	return "{\"fields\":[{\"name\":\"procOID\",\"type\":{\"fields\":[{\"name\":\"createTS\",\"type\":\"long\"},{\"name\":\"hpid\",\"type\":\"long\"}],\"name\":\"OID\",\"namespace\":\"sysflow.type\",\"type\":\"record\"}},{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"tid\",\"type\":\"long\"},{\"name\":\"opFlags\",\"type\":\"int\"},{\"name\":\"openFlags\",\"type\":\"int\"},{\"name\":\"endTs\",\"type\":\"long\"},{\"name\":\"fileOID\",\"type\":{\"name\":\"FOID\",\"namespace\":\"sysflow.type\",\"size\":20,\"type\":\"fixed\"}},{\"name\":\"fd\",\"type\":\"int\"},{\"name\":\"numRRecvOps\",\"type\":\"long\"},{\"name\":\"numWSendOps\",\"type\":\"long\"},{\"name\":\"numRRecvBytes\",\"type\":\"long\"},{\"name\":\"numWSendBytes\",\"type\":\"long\"},{\"name\":\"gapTime\",\"type\":\"long\"}],\"name\":\"sysflow.flow.FileFlow\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"procOID\",\"type\":{\"fields\":[{\"name\":\"createTS\",\"type\":\"long\"},{\"name\":\"hpid\",\"type\":\"long\"}],\"name\":\"OID\",\"namespace\":\"sysflow.type\",\"type\":\"record\"}},{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"tid\",\"type\":\"long\"},{\"name\":\"opFlags\",\"type\":\"int\"},{\"name\":\"openFlags\",\"type\":\"int\"},{\"name\":\"endTs\",\"type\":\"long\"},{\"name\":\"fileOID\",\"type\":{\"name\":\"FOID\",\"namespace\":\"sysflow.type\",\"size\":20,\"type\":\"fixed\"}},{\"name\":\"fd\",\"type\":\"int\"},{\"name\":\"numRRecvOps\",\"type\":\"long\"},{\"name\":\"numWSendOps\",\"type\":\"long\"},{\"name\":\"numRRecvBytes\",\"type\":\"long\"},{\"name\":\"numWSendBytes\",\"type\":\"long\"},{\"name\":\"gapTime\",\"type\":\"long\"},{\"name\":\"duration\",\"type\":\"long\"}],\"name\":\"sysflow.flow.FileFlow\",\"type\":\"record\"}"
 }
 
 func (r *FileFlow) SchemaName() string {
@@ -184,6 +190,8 @@ func (r *FileFlow) Get(i int) types.Field {
 		return &types.Long{Target: &r.NumWSendBytes}
 	case 12:
 		return &types.Long{Target: &r.GapTime}
+	case 13:
+		return &types.Long{Target: &r.Duration}
 	}
 	panic("Unknown field index")
 }

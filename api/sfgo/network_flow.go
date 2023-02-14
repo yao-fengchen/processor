@@ -45,6 +45,8 @@ type NetworkFlow struct {
 	NumWSendBytes int64 `json:"numWSendBytes"`
 
 	GapTime int64 `json:"gapTime"`
+
+	Duration int64 `json:"duration"`
 }
 
 const NetworkFlowAvroCRC64Fingerprint = "K\xd5\x14\xceg\xe2 \xd3"
@@ -148,6 +150,10 @@ func writeNetworkFlow(r *NetworkFlow, w io.Writer) error {
 	if err != nil {
 		return err
 	}
+	err = vm.WriteLong(r.Duration, w)
+	if err != nil {
+		return err
+	}
 	return err
 }
 
@@ -156,7 +162,7 @@ func (r *NetworkFlow) Serialize(w io.Writer) error {
 }
 
 func (r *NetworkFlow) Schema() string {
-	return "{\"fields\":[{\"name\":\"procOID\",\"type\":{\"fields\":[{\"name\":\"createTS\",\"type\":\"long\"},{\"name\":\"hpid\",\"type\":\"long\"}],\"name\":\"OID\",\"namespace\":\"sysflow.type\",\"type\":\"record\"}},{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"tid\",\"type\":\"long\"},{\"name\":\"opFlags\",\"type\":\"int\"},{\"name\":\"endTs\",\"type\":\"long\"},{\"name\":\"sip\",\"type\":\"int\"},{\"name\":\"sport\",\"type\":\"int\"},{\"name\":\"dip\",\"type\":\"int\"},{\"name\":\"dport\",\"type\":\"int\"},{\"name\":\"proto\",\"type\":\"int\"},{\"name\":\"fd\",\"type\":\"int\"},{\"name\":\"numRRecvOps\",\"type\":\"long\"},{\"name\":\"numWSendOps\",\"type\":\"long\"},{\"name\":\"numRRecvBytes\",\"type\":\"long\"},{\"name\":\"numWSendBytes\",\"type\":\"long\"},{\"name\":\"gapTime\",\"type\":\"long\"}],\"name\":\"sysflow.flow.NetworkFlow\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"procOID\",\"type\":{\"fields\":[{\"name\":\"createTS\",\"type\":\"long\"},{\"name\":\"hpid\",\"type\":\"long\"}],\"name\":\"OID\",\"namespace\":\"sysflow.type\",\"type\":\"record\"}},{\"name\":\"ts\",\"type\":\"long\"},{\"name\":\"tid\",\"type\":\"long\"},{\"name\":\"opFlags\",\"type\":\"int\"},{\"name\":\"endTs\",\"type\":\"long\"},{\"name\":\"sip\",\"type\":\"int\"},{\"name\":\"sport\",\"type\":\"int\"},{\"name\":\"dip\",\"type\":\"int\"},{\"name\":\"dport\",\"type\":\"int\"},{\"name\":\"proto\",\"type\":\"int\"},{\"name\":\"fd\",\"type\":\"int\"},{\"name\":\"numRRecvOps\",\"type\":\"long\"},{\"name\":\"numWSendOps\",\"type\":\"long\"},{\"name\":\"numRRecvBytes\",\"type\":\"long\"},{\"name\":\"numWSendBytes\",\"type\":\"long\"},{\"name\":\"gapTime\",\"type\":\"long\"},{\"name\":\"duration\",\"type\":\"long\"}],\"name\":\"sysflow.flow.NetworkFlow\",\"type\":\"record\"}"
 }
 
 func (r *NetworkFlow) SchemaName() string {
@@ -208,6 +214,8 @@ func (r *NetworkFlow) Get(i int) types.Field {
 		return &types.Long{Target: &r.NumWSendBytes}
 	case 15:
 		return &types.Long{Target: &r.GapTime}
+	case 16:
+		return &types.Long{Target: &r.Duration}
 	}
 	panic("Unknown field index")
 }
