@@ -61,6 +61,10 @@ func (s *SFObjectConverter) createContainer(cont map[string]interface{}) *sfgo.C
 		Name:       cont[cContName].(string),
 		Image:      cont[cContImage].(string),
 		Imageid:    cont[cContImageID].(string),
+		MountSource: cont[cContMountSource].(string),
+		MountDest:   cont[cContMountDest].(string),
+		MountMode:   cont[cContMountMode].(string),
+		MountPropagation: cont[cContMountPropagation].(string),
 		Privileged: cont[cContPriv].(bool),
 	}
 	ct, err := sfgo.NewContainerTypeValue(cont[cContType].(string))

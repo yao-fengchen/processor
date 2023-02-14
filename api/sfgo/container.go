@@ -21,6 +21,14 @@ type Container struct {
 
 	Imageid string `json:"imageid"`
 
+	MountSource string `json:"mountsource"`
+
+	MountDest string `json:"mountdest"`
+
+	MountMode string `json:"mountmode"`
+
+	MountPropagation string `json:"mountpropagation"`
+
 	Type ContainerType `json:"type"`
 
 	Privileged bool `json:"privileged"`
@@ -81,6 +89,22 @@ func writeContainer(r *Container, w io.Writer) error {
 	if err != nil {
 		return err
 	}
+	err = vm.WriteString(r.MountSource, w)
+	if err != nil {
+		return err
+	}
+	err = vm.WriteString(r.MountDest, w)
+	if err != nil {
+		return err
+	}
+	err = vm.WriteString(r.MountMode, w)
+	if err != nil {
+		return err
+	}
+	err = vm.WriteString(r.MountPropagation, w)
+	if err != nil {
+		return err
+	}
 	err = writeContainerType(r.Type, w)
 	if err != nil {
 		return err
@@ -101,7 +125,7 @@ func (r *Container) Serialize(w io.Writer) error {
 }
 
 func (r *Container) Schema() string {
-	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"image\",\"type\":\"string\"},{\"name\":\"imageid\",\"type\":\"string\"},{\"name\":\"type\",\"type\":{\"name\":\"ContainerType\",\"namespace\":\"sysflow.type\",\"symbols\":[\"CT_DOCKER\",\"CT_LXC\",\"CT_LIBVIRT_LXC\",\"CT_MESOS\",\"CT_RKT\",\"CT_CUSTOM\",\"CT_CRI\",\"CT_CONTAINERD\",\"CT_CRIO\",\"CT_BPM\"],\"type\":\"enum\"}},{\"name\":\"privileged\",\"type\":\"boolean\"},{\"name\":\"podId\",\"type\":[\"null\",\"string\"]}],\"name\":\"sysflow.entity.Container\",\"type\":\"record\"}"
+	return "{\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"image\",\"type\":\"string\"},{\"name\":\"imageid\",\"type\":\"string\"},{\"name\":\"mountsource\",\"type\":\"string\"},{\"name\":\"mountdest\",\"type\":\"string\"},{\"name\":\"mountmode\",\"type\":\"string\"},{\"name\":\"mountpropagation\",\"type\":\"string\"},{\"name\":\"type\",\"type\":{\"name\":\"ContainerType\",\"namespace\":\"sysflow.type\",\"symbols\":[\"CT_DOCKER\",\"CT_LXC\",\"CT_LIBVIRT_LXC\",\"CT_MESOS\",\"CT_RKT\",\"CT_CUSTOM\",\"CT_CRI\",\"CT_CONTAINERD\",\"CT_CRIO\",\"CT_BPM\"],\"type\":\"enum\"}},{\"name\":\"privileged\",\"type\":\"boolean\"},{\"name\":\"podId\",\"type\":[\"null\",\"string\"]}],\"name\":\"sysflow.entity.Container\",\"type\":\"record\"}"
 }
 
 func (r *Container) SchemaName() string {
@@ -128,10 +152,18 @@ func (r *Container) Get(i int) types.Field {
 	case 3:
 		return &types.String{Target: &r.Imageid}
 	case 4:
-		return &ContainerTypeWrapper{Target: &r.Type}
+		return &types.String{Target: &r.MountSource}
 	case 5:
-		return &types.Boolean{Target: &r.Privileged}
+		return &types.String{Target: &r.MountDest}
 	case 6:
+		return &types.String{Target: &r.MountMode}
+	case 7:
+		return &types.String{Target: &r.MountPropagation}
+	case 8:
+		return &ContainerTypeWrapper{Target: &r.Type}
+	case 9:
+		return &types.Boolean{Target: &r.Privileged}
+	case 10:
 		r.PodId = NewPodIdUnion()
 
 		return r.PodId

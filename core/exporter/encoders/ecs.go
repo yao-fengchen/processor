@@ -410,6 +410,10 @@ func encodeContainer(rec *engine.Record) JSONData {
 			ECS_CONTAINER_RUNTIME: engine.Mapper.MapStr(engine.SF_CONTAINER_TYPE)(rec),
 			ECS_CONTAINER_PRIV:    engine.Mapper.MapInt(engine.SF_CONTAINER_PRIVILEGED)(rec) != 0,
 			ECS_CONTAINER_NAME:    engine.Mapper.MapStr(engine.SF_CONTAINER_NAME)(rec),
+			ECS_MOUNT_SOURCE:	   engine.Mapper.MapStr(engine.SF_CONTAINER_MOUNT_SOURCE)(rec),
+			ECS_MOUNT_DEST:	   	   engine.Mapper.MapStr(engine.SF_CONTAINER_MOUNT_DEST)(rec),
+			ECS_MOUNT_MODE:	   	   engine.Mapper.MapStr(engine.SF_CONTAINER_MOUNT_MODE)(rec),
+			ECS_MOUNT_PROPAGATION: engine.Mapper.MapStr(engine.SF_CONTAINER_MOUNT_PROPAGATION)(rec),
 		}
 		imageid := engine.Mapper.MapStr(engine.SF_CONTAINER_IMAGEID)(rec)
 		if imageid != sfgo.Zeros.String {

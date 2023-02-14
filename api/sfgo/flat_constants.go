@@ -20,9 +20,13 @@ const (
 	CONT_NAME_STR         Attribute = CONT_ID_STR + 1
 	CONT_IMAGE_STR        Attribute = CONT_NAME_STR + 1
 	CONT_IMAGEID_STR      Attribute = CONT_IMAGE_STR + 1
+	CONT_MOUNT_SOURCE_STR Attribute = CONT_IMAGEID_STR + 1
+	CONT_MOUNT_DEST_STR	  Attribute = CONT_MOUNT_SOURCE_STR + 1
+	CONT_MOUNT_MODE_STR	  Attribute = CONT_MOUNT_DEST_STR + 1
+	CONT_MOUNT_PROPAGATION_STR Attribute = CONT_MOUNT_MODE_STR + 1
 	CONT_TYPE_INT         Attribute = SFHE_VERSION_INT + 1
 	CONT_PRIVILEGED_INT   Attribute = CONT_TYPE_INT + 1
-	CONT_PODID_STRING_STR Attribute = CONT_IMAGEID_STR + 1
+	CONT_PODID_STRING_STR Attribute = CONT_MOUNT_PROPAGATION_STR + 1
 
 	//Type name:  Pod
 	POD_TS_INT           Attribute = CONT_PRIVILEGED_INT + 1
@@ -128,6 +132,6 @@ const (
 	EV_PROC_RET_INT     Attribute = EV_PROC_OPFLAGS_INT + 1
 
 	INT_ARRAY_SIZE Attribute = 38 + 1
-	STR_ARRAY_SIZE Attribute = 37 + 1
+	STR_ARRAY_SIZE Attribute = 41 + 1
 	ANY_ARRAY_SIZE Attribute = 2 + 1
 )

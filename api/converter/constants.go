@@ -55,6 +55,10 @@ const (
 	cContName    = "name"
 	cContImage   = "image"
 	cContImageID = "imageid"
+	cContMountSource 	  = "mountsource"
+	cContMountDest	 	  = "mountdest"
+	cContMountMode   	  = "mountmode"
+	cContMountPropagation = "mountpropagation"
 	cContType    = "type"
 	cContPriv    = "privileged"
 
