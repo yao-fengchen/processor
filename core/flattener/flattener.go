@@ -324,6 +324,8 @@ func (s *Flattener) fillEntities(hdr *sfgo.SFHeader, pod *sfgo.Pod, cont *sfgo.C
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_MOUNT_DEST_STR] = cont.MountDest
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_MOUNT_MODE_STR] = cont.MountMode
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_MOUNT_PROPAGATION_STR] = cont.MountPropagation
+		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_HOSTPORT_STR] = cont.HostPort
+		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_CONTAINERPORT_STR] = cont.ContainerPort
 		fr.Ints[sfgo.SYSFLOW_IDX][sfgo.CONT_TYPE_INT] = int64(cont.Type)
 		if cont.Privileged {
 			fr.Ints[sfgo.SYSFLOW_IDX][sfgo.CONT_PRIVILEGED_INT] = 1
@@ -339,6 +341,8 @@ func (s *Flattener) fillEntities(hdr *sfgo.SFHeader, pod *sfgo.Pod, cont *sfgo.C
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_MOUNT_DEST_STR] = sfgo.Zeros.String
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_MOUNT_MODE_STR] = sfgo.Zeros.String
 		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_MOUNT_PROPAGATION_STR] = sfgo.Zeros.String
+		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_HOSTPORT_STR] = sfgo.Zeros.String
+		fr.Strs[sfgo.SYSFLOW_IDX][sfgo.CONT_CONTAINERPORT_STR] = sfgo.Zeros.String
 		fr.Ints[sfgo.SYSFLOW_IDX][sfgo.CONT_TYPE_INT] = sfgo.Zeros.Int64
 		fr.Ints[sfgo.SYSFLOW_IDX][sfgo.CONT_PRIVILEGED_INT] = sfgo.Zeros.Int64
 	}

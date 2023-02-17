@@ -121,6 +121,8 @@ const (
 	SF_CONTAINER_MOUNT_DEST			string = "sf.container.mountdest"
 	SF_CONTAINER_MOUNT_MODE			string = "sf.container.mountmode"
 	SF_CONTAINER_MOUNT_PROPAGATION	string = "sf.container.mountpropagation"
+	SF_CONTAINER_HOST_PROT			string = "sf.container.hostport"
+	SF_CONTAINER_CONTAINER_PROT		string = "sf.container.containerport"
 	SF_CONTAINER_IMAGE      string = "sf.container.image"
 	SF_CONTAINER_TYPE       string = "sf.container.type"
 	SF_CONTAINER_PRIVILEGED string = "sf.container.privileged"

@@ -66,6 +66,8 @@ func (s *SFObjectConverter) createContainer(cont map[string]interface{}) *sfgo.C
 		MountDest:   cont[cContMountDest].(string),
 		MountMode:   cont[cContMountMode].(string),
 		MountPropagation: cont[cContMountPropagation].(string),
+		HostPort:		  cont[cContHostPort].(string),	
+		ContainerPort:	  cont[cContContainerPort].(string),
 		Privileged: cont[cContPriv].(bool),
 	}
 	ct, err := sfgo.NewContainerTypeValue(cont[cContType].(string))

@@ -354,6 +354,8 @@ func getExportedMappers() map[string]*FieldEntry {
 		SF_CONTAINER_MOUNT_DEST: 		&FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.CONT_MOUNT_DEST_STR), FlatIndex:sfgo.CONT_MOUNT_DEST_STR, Type: MapSpecialStr, Source: sfgo.SYSFLOW_SRC, Section: SectCont},
 		SF_CONTAINER_MOUNT_MODE: 		&FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.CONT_MOUNT_MODE_STR), FlatIndex:sfgo.CONT_MOUNT_MODE_STR, Type: MapSpecialStr, Source: sfgo.SYSFLOW_SRC, Section: SectCont},
 		SF_CONTAINER_MOUNT_PROPAGATION: &FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.CONT_MOUNT_PROPAGATION_STR), FlatIndex:sfgo.CONT_MOUNT_PROPAGATION_STR, Type: MapSpecialStr, Source: sfgo.SYSFLOW_SRC, Section: SectCont},
+		SF_CONTAINER_HOST_PROT: 		&FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.CONT_HOSTPORT_STR), FlatIndex:sfgo.CONT_HOSTPORT_STR, Type: MapSpecialStr, Source: sfgo.SYSFLOW_SRC, Section: SectCont},
+		SF_CONTAINER_CONTAINER_PROT:	&FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.CONT_CONTAINERPORT_STR), FlatIndex:sfgo.CONT_CONTAINERPORT_STR, Type: MapSpecialStr, Source: sfgo.SYSFLOW_SRC, Section: SectCont},
 		SF_CONTAINER_IMAGE:      &FieldEntry{Map: mapStr(sfgo.SYSFLOW_SRC, sfgo.CONT_IMAGE_STR), FlatIndex: sfgo.CONT_IMAGE_STR, Type: MapStrVal, Source: sfgo.SYSFLOW_SRC, Section: SectCont},
 		SF_CONTAINER_TYPE:       &FieldEntry{Map: mapContType(sfgo.SYSFLOW_SRC, sfgo.CONT_TYPE_INT), FlatIndex: sfgo.CONT_TYPE_INT, Type: MapSpecialStr, Source: sfgo.SYSFLOW_SRC, Section: SectCont},
 		SF_CONTAINER_PRIVILEGED: &FieldEntry{Map: mapInt(sfgo.SYSFLOW_SRC, sfgo.CONT_PRIVILEGED_INT), FlatIndex: sfgo.CONT_PRIVILEGED_INT, Type: MapIntVal, Source: sfgo.SYSFLOW_SRC, Section: SectCont},

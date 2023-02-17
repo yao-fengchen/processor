@@ -60,6 +60,8 @@ const (
 	cContMountDest	 	  = "mountdest"
 	cContMountMode   	  = "mountmode"
 	cContMountPropagation = "mountpropagation"
+	cContHostPort		  = "hostport"
+	cContContainerPort	  = "containerport"
 	cContType    = "type"
 	cContPriv    = "privileged"
 

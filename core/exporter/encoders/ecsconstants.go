@@ -18,6 +18,8 @@ const (
 	ECS_MOUNT_DEST			= "mountdest"
 	ECS_MOUNT_MODE			= "mountmode"
 	ECS_MOUNT_PROPAGATION	= "mountpropagation"
+	ECS_HOST_PORT			= "hostport"
+	ECS_CONTAINER_PORT		= "containerport"
 	ECS_IMAGE_NAME = "name"
 
 	ECS_HEAD_TS	   = "ts"
